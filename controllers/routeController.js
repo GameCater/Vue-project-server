@@ -47,7 +47,6 @@ class routeController {
     loginCheck(req, res) {
         try {
             const token = req.body.token
-            console.log(token)
             const data = jwt.verify(token, TOKEN_SECRET);
             res.json({
                 status: data?true:false,
@@ -94,8 +93,9 @@ class routeController {
 
     async addUserData(req, res) {
         try {
-            console.log(req.body)
             req.body.pwd = md5(md5(req.body.pwd))
+            req.body.state = 1 // 默认普通用户
+            req.body.name = req.body.nickname = '普通用户_' + Date.now(); // 默认用户名和昵称
             const data = await M.Create("userTable", req.body); //保存
             res.json({data, status: true})
         } catch (e) {

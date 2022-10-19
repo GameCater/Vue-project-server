@@ -11,10 +11,10 @@ let schema = db.Schema,
     user = new schema({ //用户表
         name: String, //用户名
         nickname: String, //昵称
-        age: Number, //年龄
+        age: { type: Number, default: 0 }, //年龄
         pwd: String, //密码
-        image: String, //头像
-        card: String, //身份证
+        image: { type: String, default: "" }, //头像
+        card: { type: String, default: "" }, //身份证
         gender: { type: Number, default: 0 }, //0 未知 1男 2 女
         openid: { type: String, default: "0" }, //小程序用户
         email: String, //邮箱
