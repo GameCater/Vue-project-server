@@ -18,7 +18,6 @@ class routeController {
     async Login(req, res) {
         try {
             req.body.pwd = md5(md5(req.body.pwd))
-            console.log(req.body)
             const data = await M.GetOne("userTable", req.body, {
                 age: 1,
                 email: 1,
@@ -26,8 +25,10 @@ class routeController {
                 name: 1,
                 nickname: 1,
                 pic: 1,
-                state: 1
+                state: 1,
+                _id: 1
             });
+            console.log(data);
             if (data) {
                 const token = setToken(data)
                 res.json({data, token, status: true})
@@ -63,8 +64,10 @@ class routeController {
             // 获取请求头headers 中的 token //,拆分字符串把之前拼接的去掉
             const token = req.query.token //req.get('Token') //req.query.token //req.get('Authorization').split(' ')[1];
             // 解码 token
-            const data = jwt.verify(token, TOKEN_SECRET);
-
+            // const data = jwt.verify(token, TOKEN_SECRET); // 从token中解码数据有很大问题
+            const { id: _id } = req.query;
+            const data =  await M.GetOne('userTable', { _id });
+            console.log(data);
             res.json({
                 message: '用户信息获取成功',
                 code: 200,
@@ -104,9 +107,7 @@ class routeController {
     }
 
     upload(req, res) {
-        console.log(req.file);
         res.json({status: true, msg: "success", path: `/upload/${req.file.filename}`});
-
     }
 
     async initMovie(req, res) {
@@ -130,7 +131,7 @@ class routeController {
 
     }
 
-    async gettop12(req, res) {
+    async gettop(req, res) {
         const num = req.query.num || 24
         const data = await M.FetchAll("moviesTable", {}, {
             _id: 1,
@@ -427,7 +428,7 @@ class routeController {
             ]
             let data = await M.Aggregate("moviesTable", piple);  //管道 聚合 查询
             console.log("管道 聚合 查询",data);
-            data = data.reduce((a, b) => a.push(b.category) && a, [])
+            data = data.reduce((a, b) => a.push(b.count) && a, [])
             res.json({data, status: true})
 
         } catch (e) {

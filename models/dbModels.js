@@ -1,5 +1,5 @@
 const db = require("mongoose")
-db.Promise = global.Promise
+db.Promise = global.Promise // Mongoose 4.0使用自己实现的Promise，在新版中有弃用的警告，Mongoose5.0使用Node.js的Promise实现
 db.connect("mongodb://localhost:27017/wnweb65", {
     useNewUrlParser: true,
     useUnifiedTopology: true

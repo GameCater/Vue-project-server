@@ -9,9 +9,8 @@ const jwtAuth = jwt({
 }).unless({
     // 配置不需要校验的地址。配置白名单
     path: [ {
-        url: /^\/api\/(login|logincheck|getmovie|searchMove|upload|adduserdata|randMovie|gettop12|getcate|wxlogin|testuc|updatecinema|searchSession)/i,
+        url: /^\/api\/(login|logincheck|getmovie|searchMove|upload|adduserdata|randMovie|gettop|getcate|wxlogin|testuc|updatecinema|searchSession)/i,
         methods: ["GET", "POST"]
-
     },{
         url:/^\/testapi/i,
         methods:["GET","POST"]
