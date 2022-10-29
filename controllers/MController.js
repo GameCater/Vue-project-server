@@ -116,7 +116,9 @@ class MController {
      * @return   受影响的行数
      */
     Aggregate(tname,piple=[]){
-        return  db[tname].aggregate(piple)
+        return  db[tname].aggregate(piple, (err) => {
+         console.log('管道',err);
+        })
     }
 
 }

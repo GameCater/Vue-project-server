@@ -65,6 +65,22 @@ class cinemaController {
         }
 
     }
+
+    async initCinemas(req, res) {
+        let datas = require("../initjson/cinema.json");
+        const data = await M.InsertMany("cinemaTable", datas);
+        res.json({data, status: true})
+    }
+
+    async searchCinemas(req, res) {
+        try {
+            const { word } = req.query;
+            const result = await M.GetRow("cinemaTable", { brandName: { $regex: word } }, {});
+            res.json({ status: true, data: result });
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 module.exports = cinemaController;

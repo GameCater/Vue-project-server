@@ -122,7 +122,6 @@ class routeController {
         let page = req.query.page * 1;
         let category = req.query.cate * 1; //0 1,2,3
         category = category ? {state: 1, category} : {state: 1};
-
         let start = (page - 1) * pageSize;
         const data = await M.Page("moviesTable", {__v: 0}, category, {}, pageSize, start); //分页
         const count = await M.Total("moviesTable", category); //总数据
@@ -158,23 +157,24 @@ class routeController {
     async getCinema(req, res) {
         let pageSize = req.query.pagesize * 1;
         let page = req.query.page * 1;
-        let category = req.query.cate * 1; //0 1,2,3
-        category = category ? {state: 1, category} : {state: 1};
+        // let category = req.query.cate * 1; //0 1,2,3
+        // category = category ? {state: 1, category} : {state: 1};
 
         let star = (page - 1) * pageSize;
         const data = await M.Page("cinemaTable", {__v: 0}, {}, {}, pageSize, star); //分页
         const count = await M.Total("cinemaTable"); //总数据
-        res.json({count, data, status: true})
+        const maxPage = Math.ceil(count / pageSize)
+        res.json({count, data, maxPage, status: true})
 
     }
 
     async getSession(req, res) {
-        let pageSize = req.query.pagesize * 1;
+        let pageSize = req.query.pagesize * 1 || 100;
         let page = req.query.page * 1;
         let category = req.query.cate * 1; //0 1,2,3
         category = category ? {state: 1, category} : {state: 1};
 
-        let star = (page - 1) * pageSize;
+        let star = (page - 1) * pageSize || 0;
         //const data = await M.Page("sessionTable", {__v: 0},{}, {}, pageSize, star); //分页
         let piple = [
             {
@@ -228,6 +228,7 @@ class routeController {
 
     }
 
+    // 后台订单管理
     async getOrder(req, res) {
         let pageSize = req.query.pagesize * 1;
         let page = req.query.page * 1;
@@ -321,6 +322,7 @@ class routeController {
 
     async searchMove(req, res) {
         try {
+            console.log(req.query);
             let word = req.query.keyword,
                 page = req.query.page * 1,
                 pageSize = req.query.pageSize * 1;
@@ -334,7 +336,6 @@ class routeController {
 
             let start = (page - 1) * pageSize;
 
-            console.log(word, page, pageSize, start);
 
             const data = await M.Page("moviesTable", {__v: 0}, {title: {$regex: word}}, {}, pageSize, start); //分页
             const count = await M.Total("moviesTable", {title: {$regex: word}}); //总数据
@@ -349,13 +350,14 @@ class routeController {
     async wxlogin(req, res) {
         /*发送给微信服务器*/
         let data = {
-            'appid': "wx4d3771592d9cf2c5",
-            'secret': "600e574879b9caef3813b1a1958e62e2",
+            'appid': "wx21d667ec49794aba",
+            'secret': "4c3fab9cd50b3d45aa171742aaaf4010", // 开发秘钥 固定
             'js_code': req.body.code,
             'grant_type': 'authorization_code'
         };
         let params = querystring.stringify(data); //拼接成字符串
         console.log(params);
+        console.log(req.body);
         /*发送请求给微信服务器,携带参数 get*/
         request.get({
             url: 'https://api.weixin.qq.com/sns/jscode2session?' + params
@@ -379,7 +381,7 @@ class routeController {
                         nickname: req.body.userInfo.nickName,
                         age: 0,
                         pwd: "",
-                        pic: req.body.userInfo.avatarUrl,
+                        image: req.body.userInfo.avatarUrl,
                         card: "",
                         gender: req.body.userInfo.gender,
                         openid,

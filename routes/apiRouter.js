@@ -20,6 +20,13 @@ const UC=new userController();
 const sessionController=require("../controllers/sessionController")
 const SC=new sessionController();
 
+const cinemaController=require("../controllers/cinemaController")
+const CC=new cinemaController();
+
+const orderController=require("../controllers/orderController")
+const OC=new orderController();
+
+
 
 /*接口路由表*/
 const router = express.Router();
@@ -40,6 +47,8 @@ router.get('/', (req, res, next) => res.json({ info: "root" }))
     .post("/updateMovie", MC.updateOne)
     .get("/gettop", RC.gettop)
     .get("/getcinema", RC.getCinema)
+    .get("/initCinemas", CC.initCinemas)
+    .get("/searchCinemas", CC.searchCinemas)
     .get("/getsession", RC.getSession)
     .get("/getorder", RC.getOrder)
     .get("/movieoptions", RC.movieOptions)
@@ -52,7 +61,13 @@ router.get('/', (req, res, next) => res.json({ info: "root" }))
     .get("/getcate", MC.getcate)
     .get("/testuc",UC.test)
     .get("/searchSession",SC.searchSession)
-
+    .get("/searchMoviesLess", MC.searchMoviesLess)
+    .post("/createSession", SC.createSession)
+    .get("/deleteSession", SC.deleteSession)
+    .get("/querySessions", SC.querySessions)
+    .get("/getSessionsByMid", SC.getSessionsByMid)
+    .get("/generateOrder", OC.generateOrder)
+    .get("/getOrderDetail", OC.getOrderDetail)
 
 
 module.exports = router;

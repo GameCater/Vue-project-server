@@ -51,7 +51,7 @@ let schema = db.Schema,
     }),
     order = new schema({ //订单明细表 _id 电影编号
         uid: String, //用户编号
-        cid: String, //电影号
+        // cid: String, //影院号
         sid: String, //场次编号
         orderTime: Number, // 下订单的时间
         state: { type: Number, default: 0 }, // 订单状态(0 未支付 1 已付款)

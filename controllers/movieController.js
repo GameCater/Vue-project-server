@@ -3,6 +3,16 @@ const TB="moviesTable";
 
 class movieController {
 
+    async searchMoviesLess(req, res) {
+        try {
+            const { word } = req.query;
+            const data = await M.GetRow(TB, { title: { $regex: word } }, {});
+            res.json({ status: true, data });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async getcate(req,res){
         try{
             let cate=Number(req.query.cate)
