@@ -81,6 +81,48 @@ class cinemaController {
             console.log(error);
         }
     }
+
+    async deleteCinema(req, res) {
+        try {
+            const { id } = req.query;
+            await M.Del(TB, { _id: id });
+            res.json({ status: true });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async addCm(req, res) {
+        try {
+            let obj = req.body
+            const data = await M.InserMany(TB, obj)
+            res.json(data.length > 0 ? {status: true, data} : {status: false})
+        } catch (e) {
+            res.json({e: e.message, status: false})
+        }
+
+    }
+
+    async updataCm(req, res) {
+        try {
+            let obj = req.body
+            const data = await M.Update(TB, {_id: obj._id}, obj)
+
+            res.json({data, status: data.modifiedCount == 1 ? true : false})
+        } catch (e) {
+            res.json({e: e.message, status: false})
+        }
+    }
+
+    async findByIdCm(req, res) {
+        try {
+            let _id = req.body.id;
+            let data = await M.GetOne(TB, {_id})
+            res.json({status: true, data})
+        } catch (err) {
+            res.json({status: false, data: err})
+        }
+    }
 }
 
 module.exports = cinemaController;

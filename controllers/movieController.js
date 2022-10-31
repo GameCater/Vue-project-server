@@ -71,5 +71,21 @@ class movieController {
             res.json({ status: false, reason: error.message });
         }
     }
+
+    // 发现电影 state: 2 pbtime: -1
+    async findMovies(req, res) {
+        try {
+            let { page, pageSize } = req.query;
+            page = parseInt(page, 10) || 1,
+            pageSize = parseInt(pageSize, 10) || 10;
+    
+            const results = await M.Page(TB, {}, { state: 2 }, { pbtime: -1 }, pageSize, (page - 1)*page);
+            const count = await M.Total(TB, { state: 2 });
+            const maxPage = Math.ceil(count / pageSize);
+            res.json({ status: true, data: results, total: count, maxPage });
+        } catch (error) {
+            console.log(error);            
+        }
+    }
 }
 module.exports = movieController;

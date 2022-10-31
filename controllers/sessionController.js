@@ -6,6 +6,7 @@ const {ObjectId} = Types;
 
 
 class sessionController {
+    // 根据id查询场次详情
     async searchSession(req, res) {
         try {
             const {id}=req.query;
@@ -63,6 +64,7 @@ class sessionController {
 
     }
 
+    // 新增场次信息
     async createSession(req, res) {
         try {
             const { data } = req.body;
@@ -83,6 +85,7 @@ class sessionController {
         }
     }
 
+    // 场次模糊查询
     async querySessions(req, res) {
         try {
             const { word } = req.query;
@@ -124,6 +127,7 @@ class sessionController {
         }
     }
 
+    // 根据电影id查询场次
     async getSessionsByMid(req, res) {
         // 默认第一页 20条数据
         const { id, page = 1, pageSize = 20 } = req.query;
@@ -153,7 +157,7 @@ class sessionController {
                 }
             },
             {
-                $lookup: { // 连影院表
+                $lookup: { // 联影院表
                     from: "cinemainfo",
                     localField: "cid",
                     foreignField: "_id",

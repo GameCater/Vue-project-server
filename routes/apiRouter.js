@@ -68,6 +68,9 @@ router.get('/', (req, res, next) => res.json({ info: "root" }))
     .get("/getSessionsByMid", SC.getSessionsByMid)
     .get("/generateOrder", OC.generateOrder)
     .get("/getOrderDetail", OC.getOrderDetail)
+    .get("/getOrderList", OC.getOrderList)
+    .get("/getOrders", OC.getUserOrders)
+    .get("/findMovies", MC.findMovies)
 
 
 module.exports = router;

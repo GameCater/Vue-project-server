@@ -15,6 +15,7 @@ function setToken(obj) {
 }
 
 class routeController {
+    // 用户登录
     async Login(req, res) {
         try {
             req.body.pwd = md5(md5(req.body.pwd))
@@ -59,6 +60,7 @@ class routeController {
 
     }
 
+    // 获取已登录用户信息
     async getUserInfo(req, res) {
         try {
             // 获取请求头headers 中的 token //,拆分字符串把之前拼接的去掉
@@ -79,6 +81,7 @@ class routeController {
 
     }
 
+    // 用户列表
     async getuserData(req, res) {
         try {
             let pageSize = req.query.pagesize * 1;
@@ -94,6 +97,7 @@ class routeController {
 
     }
 
+    // 前台注册用户
     async addUserData(req, res) {
         try {
             req.body.pwd = md5(md5(req.body.pwd))
@@ -117,6 +121,7 @@ class routeController {
         res.json({datas, status: true})
     }
 
+    // 电影列表
     async getMovie(req, res) {
         let pageSize = req.query.pageSize * 1;
         let page = req.query.page * 1;
@@ -130,6 +135,7 @@ class routeController {
 
     }
 
+    // 热映
     async gettop(req, res) {
         const num = req.query.num || 24
         const data = await M.FetchAll("moviesTable", {}, {
@@ -154,6 +160,7 @@ class routeController {
         res.json({max, data, status: true})
     }
 
+    // 影院列表
     async getCinema(req, res) {
         let pageSize = req.query.pagesize * 1;
         let page = req.query.page * 1;
@@ -168,6 +175,7 @@ class routeController {
 
     }
 
+    // 场次列表
     async getSession(req, res) {
         let pageSize = req.query.pagesize * 1 || 100;
         let page = req.query.page * 1;
@@ -308,6 +316,7 @@ class routeController {
 
     }
 
+    // 根据id获取上映电影
     async getShow(req, res) {
 
         try {
@@ -320,6 +329,7 @@ class routeController {
 
     }
 
+    // 模糊查询电影
     async searchMove(req, res) {
         try {
             console.log(req.query);
@@ -347,6 +357,7 @@ class routeController {
         }
     }
 
+    // 微信登录
     async wxlogin(req, res) {
         /*发送给微信服务器*/
         let data = {
@@ -401,16 +412,10 @@ class routeController {
                 }
 
             }
-
-
-
-
-            //
-
-
         });
     }
 
+    // 统计电影
     async getCharts(req, res) {
         try {
             const piple = [
@@ -438,6 +443,7 @@ class routeController {
         }
     }
 
+    // 电影选择
     async movieOptions(req, res) {
         try {
             let word = req.query.word;
@@ -448,6 +454,7 @@ class routeController {
         }
     }
 
+    // 影院选择
     async cinemaOptions(req, res) {
         try {
             let word = req.query.word;
