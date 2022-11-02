@@ -92,7 +92,7 @@ class userController {
     }
 
     async delOneUser(req, res) {
-        let _id = req.body.id;
+        let _id = req.query.id;
         let {deletedCount:data} = await M.Del("userTable",{_id})
         res.json(data == 1 ? {status:true,data}:{status:false})
     }
@@ -102,9 +102,41 @@ class userController {
         try{
             let _id = req.query.id;
             let data=await M.GetOne("userTable",{_id})
+            console.log(data);
             res.json({status:true,data})
         }catch (err) {
             res.json({status:false,data:err})
+        }
+    }
+
+    // 新增用户
+    async addUser(req, res) {
+        try {
+            req.body.pwd = md5(md5(md5(req.body.pwd)));
+            req.body.state = 1 // 默认普通用户
+            if (!req.body.name && !req.body.nickname)
+                req.body.name = req.body.nickname = '普通用户_' + Date.now(); // 默认用户名和昵称
+            const data = await M.Create("userTable", req.body); //保存
+            res.json({data, status: true})
+        } catch (e) {
+            console.log(e);
+            res.json({e: e.message, status: false})
+        }
+    }
+
+    // 后台更新用户信息
+    async updateUserInfo(req, res) {
+        try {
+            const data = req.body;
+            const user = await M.GetOne(TB, { _id: data._id });
+            console.log(data, user);
+            if (user.pwd !== data.pwd) {
+                data.pwd = md5(md5(md5(data.pwd)));
+            }
+            const { modifiedCount } = await M.Update(TB, { _id: data._id }, data);
+            res.json(modifiedCount > 0 ? { status: true } : { status: false });
+        } catch (error) {
+            console.log(error);            
         }
     }
 }

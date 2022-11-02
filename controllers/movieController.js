@@ -87,5 +87,18 @@ class movieController {
             console.log(error);            
         }
     }
+
+    // 新增电影
+    async addMovie(req, res) {
+        try {
+            const data = req.body;
+            data.language = data.language.join(' ');
+            const results = await M.Create(TB, data);
+            console.log(results);
+            res.json({ status: true });
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 module.exports = movieController;

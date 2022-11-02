@@ -71,6 +71,17 @@ router.get('/', (req, res, next) => res.json({ info: "root" }))
     .get("/getOrderList", OC.getOrderList)
     .get("/getOrders", OC.getUserOrders)
     .get("/findMovies", MC.findMovies)
+    .get("/getSessionsGroupByCid", SC.getSessionsGroupByCid)
+    .get("/getOrdersGroupByUid", OC.getOrdersGroupByUid)
+    .get("/delOneUser", UC.delOneUser)
+    .get("/searchUser", UC.searchUser)
+    .post("/addMovie", MC.addMovie)
+    .post("/addCinema", CC.addCm)
+    .post("/updateCinema", CC.updataCm)
+    .get("/fetchCinema", CC.findByIdCm)
+    .post("/addUser", UC.addUser)
+    .get("/fetchUser", UC.findById)
+    .post("/updateUser", UC.updateUserInfo)
 
 
 module.exports = router;

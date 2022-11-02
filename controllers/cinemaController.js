@@ -1,5 +1,5 @@
 const M = require("./MController");
-const TB = "sessionTable";
+const TB = "cinemaTable";
 //使用 Aggregate 查询_id 如果要转换数据类型时使用
 const {Types} = require("mongoose");
 const {ObjectId} = Types;
@@ -94,9 +94,10 @@ class cinemaController {
 
     async addCm(req, res) {
         try {
-            let obj = req.body
-            const data = await M.InserMany(TB, obj)
-            res.json(data.length > 0 ? {status: true, data} : {status: false})
+            let obj = req.body;
+            console.log(obj);
+            await M.Create(TB, obj)
+            res.json({status: true})
         } catch (e) {
             res.json({e: e.message, status: false})
         }
@@ -116,8 +117,9 @@ class cinemaController {
 
     async findByIdCm(req, res) {
         try {
-            let _id = req.body.id;
+            let _id = req.query.id;
             let data = await M.GetOne(TB, {_id})
+            console.log(data);
             res.json({status: true, data})
         } catch (err) {
             res.json({status: false, data: err})

@@ -54,7 +54,7 @@ let schema = db.Schema,
         // cid: String, //影院号
         sid: String, //场次编号
         orderTime: Number, // 下订单的时间
-        state: { type: Number, default: 0 }, // 订单状态(0 未支付 1 已付款)
+        state: { type: Number, default: 0 }, // 订单状态(0 未过期 1 已过期)
     }),
     //over
     message = new schema({

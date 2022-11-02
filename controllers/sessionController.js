@@ -179,6 +179,30 @@ class sessionController {
         const maxPage = Math.ceil(total / pageSize);
         res.json({results, total, maxPage});
     }
+
+    // 特例
+    async getSessionsGroupByCid(req, res) {
+        const { mid } = req.query;
+        const pipes = [
+            {
+                $match: {
+                    mid: mid,
+                    state: 1
+                }
+            },
+            {
+                $group: {
+                    _id: "$cid",
+                    times: {
+                        $push: "$startTime"
+                    }
+                }
+            }
+        ];
+        const results = await M.Aggregate(TB, pipes);
+        console.log(results);
+        res.json({ status: true, data: results });
+    }
 }
 
 module.exports = sessionController;

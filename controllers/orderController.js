@@ -58,7 +58,7 @@ module.exports = class {
               $toObjectId: "$sid",
             },
             orderTime: 1,
-            state: 1
+            state: 1,
           }
         },
         {
@@ -73,6 +73,34 @@ module.exports = class {
           $lookup: {
             from: 'sessioninfo',
             foreignField: '_id',
+            pipeline: [
+              {
+                $project: {
+                  'cid': {
+                    $toObjectId: '$cid',
+                  },
+                  'mid': {
+                    $toObjectId: '$mid'
+                  },
+                  state: 1,
+                  startTime: 1
+                }
+              },
+              {
+                $lookup: {
+                  from: 'cinemainfo',
+                  localField: 'cid',
+                  foreignField: '_id',
+                  as: 'cinema'
+                },
+                $lookup: {
+                  from: 'moviesinfo',
+                  localField: 'mid',
+                  foreignField: '_id',
+                  as: 'movie'
+                },
+              }
+            ],
             localField: 'sid',
             as: 'sessions',
           }
@@ -98,5 +126,73 @@ module.exports = class {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  // 后台获取用户订单
+  async getOrdersGroupByUid(req, res) {
+    const pipes = [
+      {
+        $project: {
+          oid: "$_id",
+          uid: 1,
+          orderTime: 1,
+          state: 1,
+          sid: 1
+        }
+      },
+      {
+        $group: {
+          _id: "$uid",
+          orders: {
+            $push: "$oid"
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: 'orderinfo',
+          localField: 'orders',
+          foreignField: '_id',
+          pipeline: [
+            {
+              $project: {
+                sid: {
+                  $toObjectId: "$sid",
+                },
+                state: 1,
+                orderTime: 1
+              }
+            },
+            {
+              $lookup: {
+                from: 'sessioninfo',
+                localField: 'sid',
+                foreignField: '_id',
+                as: 'session'
+              }
+            }
+          ],
+          as: 'orders'
+        }
+      },
+      {
+        $project: {
+          '_id': {
+            $toObjectId: "$_id",
+          },
+          orders: 1,
+        }
+      },
+      {
+        $lookup: {
+          from: 'userinfo',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'user'
+        }
+      },
+    ];
+    const results = await M.Aggregate(TB, pipes);
+    res.json({ results });
   }
 }

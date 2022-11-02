@@ -162,7 +162,7 @@ class routeController {
 
     // 影院列表
     async getCinema(req, res) {
-        let pageSize = req.query.pagesize * 1;
+        let pageSize = req.query.pageSize * 1;
         let page = req.query.page * 1;
         // let category = req.query.cate * 1; //0 1,2,3
         // category = category ? {state: 1, category} : {state: 1};
