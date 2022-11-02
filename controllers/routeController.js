@@ -464,6 +464,20 @@ class routeController {
             res.json({e: e.message, status: false})
         }
     }
+
+    
+    // 后台所有数据统计
+    async statistic(req, res) {
+        const tableName = ['user', 'cinema', 'movies', 'session', 'order'];
+        const results = [];
+        for (let name of tableName) {
+            results.push({
+                value: await M.Total(`${name}Table`),
+                name,
+            })
+        }
+        res.json({ data: results });
+    }
 }
 
 module.exports = routeController;

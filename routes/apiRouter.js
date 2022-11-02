@@ -82,6 +82,7 @@ router.get('/', (req, res, next) => res.json({ info: "root" }))
     .post("/addUser", UC.addUser)
     .get("/fetchUser", UC.findById)
     .post("/updateUser", UC.updateUserInfo)
+    .get("/statistic", RC.statistic)
 
 
 module.exports = router;
